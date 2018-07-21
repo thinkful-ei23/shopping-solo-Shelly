@@ -9,7 +9,8 @@ const STORE = {
 		{name: 'bread', checked: false}
 	],
 
-	checkedItems : []};
+	displayChecked : false
+};
 
 function generateItemElement(item, itemIndex, template) {
 	return `
@@ -38,9 +39,15 @@ function generateShoppingItemsString(shoppingList) {
 function renderShoppingList() {
 	// render the shopping list in the DOM
 	console.log('`renderShoppingList` ran');
-	const shoppingListItemsString = generateShoppingItemsString(STORE.items);
+  let shoppingListItemsString = generateShoppingItemsString(STORE.items);
 
-	// insert that HTML into the DOM
+  let checkedItems = []
+  if (STORE.displayChecked === true) {
+    shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
+  }
+  //console.log(shoppingListItemsString);
+
+  	// insert that HTML into the DOM
 	$('.js-shopping-list').html(shoppingListItemsString);
 }
 
@@ -70,12 +77,6 @@ function deleteItemClicked(itemIndex) {
 	console.log('Deleting item from index' + itemIndex);
 	STORE.items.splice(itemIndex,1);
 }
-
-function hideItemClicked(checkedItems) {
-  console.log('Hidden!');
-  //if an obj in the array of items === an obj in the array of checkedItems
-  $('.js-shopping-list').toggle()
-  }
 
 function getItemIndexFromElement(item) {
 	const itemIndexString = $(item)
@@ -107,14 +108,13 @@ function handleDeleteItemClicked() {
 
 function handleSwitchItemClicked() {
 	// this function will be responsible for when users want to hide checked items
-	$('.shopping-list-button').on('click', '.shopping-item-switch', event => {
+	$('#js-shopping-list-form').on('change', '#shopping-list-checkbox', event => {
 		console.log('`handleSwitchItemClicked` ran');
 		// create variable that stores indexes that contain false for checked property  
-		STORE.checkedItems = STORE.items.filter(objItem => objItem.checked === true);
-    console.log(STORE.checkedItems);
-    hideItemClicked();
-    renderShoppingList()
-  });
+		// move to render inside if-statement ==> STORE.checkedItems = STORE.items.filter(objItem => objItem.checked === true);
+		STORE.displayChecked = !STORE.displayChecked;
+		renderShoppingList()
+	});
 }
 
 function handleShoppingList() {
