@@ -9,7 +9,9 @@ const STORE = {
 		{name: 'bread', checked: false}
 	],
 
-	displayChecked : false
+	displayChecked : false,
+
+	searched : []
 };
 
 function generateItemElement(item, itemIndex, template) {
@@ -44,7 +46,8 @@ function renderShoppingList() {
   let checkedItems = []
   if (STORE.displayChecked === true) {
     shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
-  }
+	}
+	
   //console.log(shoppingListItemsString);
 
   	// insert that HTML into the DOM
@@ -64,6 +67,23 @@ function handleNewItemSubmit() {
 		const newItemName = $('.js-shopping-list-entry').val();
 		$('.js-shopping-list-entry').val('');
 		addItemToShoppingList(newItemName);
+		renderShoppingList();
+	});
+}
+
+function onlyShowSearchItems(newSearchItem) {
+	console.log(`Looked for ${newSearchItem}`);
+	STORE.items = STORE.items.filter(item => item.name === newSearchItem)
+}
+
+function handleSearch() {
+	$('#js-shopping-search').submit(function(event) {
+		event.preventDefault();
+		console.log(`'handleSearch' ran`);
+		const newSearchItem = $('.shopping-list-searching').val();
+		$('.shopping-list-searching').val('');
+		console.log(newSearchItem);
+		onlyShowSearchItems(newSearchItem);
 		renderShoppingList();
 	});
 }
@@ -123,6 +143,7 @@ function handleShoppingList() {
 	handleItemCheckClicked();
 	handleDeleteItemClicked();
 	handleSwitchItemClicked();
+	handleSearch();
 }
 
 // when the page loads, call `handleShoppingList`
