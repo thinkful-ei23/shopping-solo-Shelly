@@ -24,7 +24,9 @@ function generateItemElement(item, itemIndex, template) {
         </button>
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
-        </button>
+				</button>
+				<input type="text" name="js-shopping-list-edit" class="js-shopping-list-edit" id="js-shopping-list-edit" placeholder="e.g., broccoli">
+        	<button type="submit" class ="shopping-item-edit">Change item</button>
       </div>
     </li>`;
 }
@@ -47,13 +49,15 @@ function renderShoppingList() {
   if (STORE.displayChecked === true) {
     shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
 	}
-	
   //console.log(shoppingListItemsString);
-
   	// insert that HTML into the DOM
 	$('.js-shopping-list').html(shoppingListItemsString);
 }
 
+function editedItem(editedItemName, itemIndex) {
+	console.log('new name prepped');
+	STORE.items[itemIndex].name = editedItemName
+}
 
 function addItemToShoppingList(itemName) {
 	console.log(`Adding "${itemName}" to shopping list`);
@@ -137,6 +141,20 @@ function handleSwitchItemClicked() {
 	});
 }
 
+function handleEditItemClicked() {
+	// this function will be responsible for when users edit an existing item
+ $('.js-shopping-list').on('click', '.shopping-item-edit', event => {
+	console.log('`handleEditItemClicked` ran');
+	const itemIndex = getItemIndexFromElement(event.currentTarget);
+	const editedItemName = $('.js-shopping-list-edit').val();
+	$('.js-shopping-list-edit').val(event.currentTarget);
+	console.log(editedItemName);
+	console.log(itemIndex);
+	//editedItem(editedItemName, itemIndex);
+	renderShoppingList();
+ })
+}
+
 function handleShoppingList() {
 	renderShoppingList();
 	handleNewItemSubmit();
@@ -144,6 +162,7 @@ function handleShoppingList() {
 	handleDeleteItemClicked();
 	handleSwitchItemClicked();
 	handleSearch();
+	handleEditItemClicked();
 }
 
 // when the page loads, call `handleShoppingList`
