@@ -10,8 +10,6 @@ const STORE = {
 	],
 
 	displayChecked : false,
-
-	searched : []
 };
 
 function generateItemElement(item, itemIndex, template) {
@@ -51,13 +49,13 @@ function renderShoppingList() {
 		shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
 	}
 	//console.log(shoppingListItemsString);
-  	// insert that HTML into the DOM
+	// insert that HTML into the DOM
 	$('.js-shopping-list').html(shoppingListItemsString);
 }
 
 function editedItem(editedItemName, itemIndex) {
 	console.log('new name prepped');
-	STORE.items[itemIndex].name = editedItemName
+	STORE.items[itemIndex].name = editedItemName;
 }
 
 function addItemToShoppingList(itemName) {
@@ -78,7 +76,7 @@ function handleNewItemSubmit() {
 
 function onlyShowSearchItems(newSearchItem) {
 	console.log(`Looked for ${newSearchItem}`);
-	STORE.items = STORE.items.filter(item => item.name === newSearchItem)
+	STORE.items = STORE.items.filter(item => item.name === newSearchItem);
 }
 
 function handleSearch() {
@@ -138,7 +136,7 @@ function handleSwitchItemClicked() {
 		// create variable that stores indexes that contain false for checked property  
 		// move to render inside if-statement ==> STORE.checkedItems = STORE.items.filter(objItem => objItem.checked === true);
 		STORE.displayChecked = !STORE.displayChecked;
-		renderShoppingList()
+		renderShoppingList();
 	});
 }
 
@@ -147,13 +145,13 @@ function handleEditItemClicked() {
 	$('.js-shopping-list').on('submit', '.js-shopping-list-edit-form', event => {
 		event.preventDefault();
 		console.log('`handleEditItemClicked` ran');
-	const itemIndex = getItemIndexFromElement(event.currentTarget);
-	const editedItemName = $(event.currentTarget).find('.shopping-list-edit').val();
-	$(event.currentTarget).find('.shopping-list-edit').val('');
-	console.log(editedItemName);
-	console.log(itemIndex);
-	editedItem(editedItemName, itemIndex);
-	renderShoppingList();
+		const itemIndex = getItemIndexFromElement(event.currentTarget);
+		const editedItemName = $(event.currentTarget).find('.shopping-list-edit').val();
+		$(event.currentTarget).find('.shopping-list-edit').val('');
+		console.log(editedItemName);
+		console.log(itemIndex);
+		editedItem(editedItemName, itemIndex);
+		renderShoppingList();
 	});
 }
 
