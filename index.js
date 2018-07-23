@@ -1,4 +1,4 @@
-'use strict';
+/* global $ */
 
 const STORE = {
   
@@ -25,10 +25,12 @@ function generateItemElement(item, itemIndex, template) {
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
 				</button>
-				<input type="text" name="js-shopping-list-edit" class="js-shopping-list-edit" id="js-shopping-list-edit" placeholder="e.g., broccoli">
-        	<button type="submit" class ="shopping-item-edit">Change item</button>
-      </div>
-    </li>`;
+			</div>
+			<form class="js-shopping-list-edit">
+				<input type="text" name="shopping-list-edit" class="shopping-list-edit" id="shopping-list-edit">
+				<button type="submit">Edit</button>
+      </form>
+		</li>`;
 }
 
 function generateShoppingItemsString(shoppingList) {
@@ -43,13 +45,12 @@ function generateShoppingItemsString(shoppingList) {
 function renderShoppingList() {
 	// render the shopping list in the DOM
 	console.log('`renderShoppingList` ran');
-  let shoppingListItemsString = generateShoppingItemsString(STORE.items);
+	let shoppingListItemsString = generateShoppingItemsString(STORE.items);
 
-  let checkedItems = []
-  if (STORE.displayChecked === true) {
-    shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
+	if (STORE.displayChecked === true) {
+		shoppingListItemsString = generateShoppingItemsString(STORE.items.filter(objItem => objItem.checked === false));
 	}
-  //console.log(shoppingListItemsString);
+	//console.log(shoppingListItemsString);
   	// insert that HTML into the DOM
 	$('.js-shopping-list').html(shoppingListItemsString);
 }
@@ -143,16 +144,17 @@ function handleSwitchItemClicked() {
 
 function handleEditItemClicked() {
 	// this function will be responsible for when users edit an existing item
- $('.js-shopping-list').on('click', '.shopping-item-edit', event => {
-	console.log('`handleEditItemClicked` ran');
+	$('.js-shopping-list-edit').submit(function(event) {
+		event.preventDefault();
+		console.log('`handleEditItemClicked` ran');
 	const itemIndex = getItemIndexFromElement(event.currentTarget);
-	const editedItemName = $('.js-shopping-list-edit').val();
-	$('.js-shopping-list-edit').val(event.currentTarget);
+	const editedItemName = $('#shopping-list-edit').val();
+	$('#shopping-list-edit').val('');
 	console.log(editedItemName);
 	console.log(itemIndex);
 	//editedItem(editedItemName, itemIndex);
-	renderShoppingList();
- })
+	//renderShoppingList();
+	});
 }
 
 function handleShoppingList() {
