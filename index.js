@@ -26,8 +26,8 @@ function generateItemElement(item, itemIndex, template) {
             <span class="button-label">delete</span>
 				</button>
 			</div>
-			<form class="js-shopping-list-edit">
-				<input type="text" name="shopping-list-edit" class="shopping-list-edit" id="shopping-list-edit">
+			<form class="js-shopping-list-edit-form">
+				<input type="text" name="shopping-list-edit" class="shopping-list-edit">
 				<button type="submit">Edit</button>
       </form>
 		</li>`;
@@ -144,16 +144,16 @@ function handleSwitchItemClicked() {
 
 function handleEditItemClicked() {
 	// this function will be responsible for when users edit an existing item
-	$('.js-shopping-list-edit').submit(function(event) {
+	$('.js-shopping-list').on('submit', '.js-shopping-list-edit-form', event => {
 		event.preventDefault();
 		console.log('`handleEditItemClicked` ran');
 	const itemIndex = getItemIndexFromElement(event.currentTarget);
-	const editedItemName = $('#shopping-list-edit').val();
-	$('#shopping-list-edit').val('');
+	const editedItemName = $(event.currentTarget).find('.shopping-list-edit').val();
+	$(event.currentTarget).find('.shopping-list-edit').val('');
 	console.log(editedItemName);
 	console.log(itemIndex);
-	//editedItem(editedItemName, itemIndex);
-	//renderShoppingList();
+	editedItem(editedItemName, itemIndex);
+	renderShoppingList();
 	});
 }
 
